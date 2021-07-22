@@ -9,40 +9,40 @@ namespace RingBuffer.Tests
         [Fact]
         public void TestEmptyBuffer()
         {
-            RingBuffer buffer = new RingBuffer(10);
+            var ring = new RingBuffer<byte>(10);
 
-            Assert.Equal(0, buffer.Count);
-            Assert.Equal(10, buffer.Available);
-            Assert.Equal(10, buffer.Capacity);
+            Assert.Equal(0, ring.Count);
+            Assert.Equal(10, ring.Available);
+            Assert.Equal(10, ring.Capacity);
         }
 
         [Fact]
         public void TestAddBytesAtStart()
         {
             var testData = new byte[] {1, 2, 3, 4};
-            var buffer = new RingBuffer(10);
+            var ring = new RingBuffer<byte>(10);
 
-            buffer.Push(testData);
+            ring.Push(testData);
 
-            Assert.Equal(4, buffer.Count);
-            Assert.Equal(6, buffer.Available);
-            Assert.Equal(1, buffer[0]);
-            Assert.Equal(2, buffer[1]);
-            Assert.Equal(3, buffer[2]);
-            Assert.Equal(4, buffer[3]);
+            Assert.Equal(4, ring.Count);
+            Assert.Equal(6, ring.Available);
+            Assert.Equal(1, ring[0]);
+            Assert.Equal(2, ring[1]);
+            Assert.Equal(3, ring[2]);
+            Assert.Equal(4, ring[3]);
         }
 
         [Fact]
         public void TestTakeBytesAtStart()
         {
             var testData = new byte[] {1, 2, 3, 4};
-            var buffer = new RingBuffer(10);
-            buffer.Push(testData);
+            var ring = new RingBuffer<byte>(10);
+            ring.Push(testData);
 
-            var result = buffer.Take(4);
+            var result = ring.Take(4);
 
-            Assert.Equal(0, buffer.Count);
-            Assert.Equal(10, buffer.Available);
+            Assert.Equal(0, ring.Count);
+            Assert.Equal(10, ring.Available);
             Assert.Equal(1, result[0]);
             Assert.Equal(2, result[1]);
             Assert.Equal(3, result[2]);
@@ -53,12 +53,12 @@ namespace RingBuffer.Tests
         public void TestFind()
         {
             var testData = new byte[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-            var buffer = new RingBuffer(10);
-            buffer.Push(testData);
-            buffer.Take(2);
+            var ring = new SearchableRingBuffer<byte>(10);
+            ring.Push(testData);
+            ring.Take(2);
 
             var find = new byte[] {5, 6, 7};
-            var location = buffer.Find(find);
+            var location = ring.Find(find);
 
             Assert.Equal(2, location);
         }
@@ -67,11 +67,11 @@ namespace RingBuffer.Tests
         public void TestFindFull()
         {
             var testData = new byte[] {1, 2, 3};
-            var buffer = new RingBuffer(10);
-            buffer.Push(testData);
+            var ring = new SearchableRingBuffer<byte>(10);
+            ring.Push(testData);
 
             var find = new byte[] {1, 2, 3};
-            var location = buffer.Find(find);
+            var location = ring.Find(find);
 
             Assert.Equal(0, location);
         }
@@ -79,37 +79,37 @@ namespace RingBuffer.Tests
         [Fact]
         public void TestPushOne()
         {
-            var buffer = new RingBuffer(10);
-            buffer.PushOne(1);
-            buffer.PushOne(2);
+            var ring = new RingBuffer<byte>(10);
+            ring.PushOne(1);
+            ring.PushOne(2);
 
-            Assert.Equal(2, buffer.Count);
-            Assert.Equal(1, buffer[0]);
-            Assert.Equal(2, buffer[1]);
+            Assert.Equal(2, ring.Count);
+            Assert.Equal(1, ring[0]);
+            Assert.Equal(2, ring[1]);
         }
 
         [Fact]
         public void TestTakeOne()
         {
             var testData = new byte[] {1, 2, 3};
-            var buffer = new RingBuffer(10);
-            buffer.Push(testData);
+            var ring = new RingBuffer<byte>(10);
+            ring.Push(testData);
 
-            Assert.Equal(1, buffer.TakeOne());
-            Assert.Equal(2, buffer.TakeOne());
-            Assert.Equal(1, buffer.Count);
+            Assert.Equal(1, ring.TakeOne());
+            Assert.Equal(2, ring.TakeOne());
+            Assert.Equal(1, ring.Count);
         }
 
         [Fact]
         public void TestFindSearchTooBig()
         {
             var testData = new byte[] {1, 2, 3};
-            var buffer = new RingBuffer(10);
-            buffer.Push(testData);
-            buffer.Take(2);
+            var ring = new SearchableRingBuffer<byte>(10);
+            ring.Push(testData);
+            ring.Take(2);
 
             var find = new byte[] {1, 2, 3};
-            var location = buffer.Find(find);
+            var location = ring.Find(find);
 
             Assert.True(location < 0);
         }
@@ -127,7 +127,7 @@ namespace RingBuffer.Tests
             int readIndex = 0;
             int writeIndex = 0;
 
-            var ring = new RingBuffer(50);
+            var ring = new RingBuffer<byte>(50);
 
             while (readIndex < testCount)
             {

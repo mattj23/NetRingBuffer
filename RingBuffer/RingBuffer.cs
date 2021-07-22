@@ -6,12 +6,12 @@ namespace RingBuffer
     /// A ring buffer (or circular buffer) is a fixed array stored in memory which acts like an
     /// infinitely advancing queue. 
     /// </summary>
-    public class RingBuffer
+    public class RingBuffer<T>
     {
         /// <summary>
         /// Internal storage array
         /// </summary>
-        private readonly byte[] _buffer;
+        private readonly T[] _buffer;
 
         /// <summary>
         /// The index of the first element of data
@@ -30,7 +30,7 @@ namespace RingBuffer
         public RingBuffer(int capacity)
         {
             Capacity = capacity;
-            _buffer = new byte[capacity + 1];
+            _buffer = new T[capacity + 1];
             _start = 0;
             _end = 0;
         }
@@ -66,46 +66,17 @@ namespace RingBuffer
         /// </summary>
         /// <param name="index">The index of the element to access, expressed as an offset from the first valid entry in the buffer</param>
         /// <returns></returns>
-        public byte this[int index]
+        public T this[int index]
         {
             get => _buffer[RawIndexOf(index)];
             set => _buffer[RawIndexOf(index)] = value;
         }
 
         /// <summary>
-        /// Search the entire buffer for a sequence of elements given as the argument, returning either the index of
-        /// the first element or a negative value if the sequence was not found. If the search sequence is longer than
-        /// the number of elements stored in the buffer, a negative value will also be returned.
-        /// </summary>
-        /// <param name="sequence">The sequence to search the buffer for</param>
-        /// <returns>Either the index of the found first element or a negative number if none was found</returns>
-        public int Find(ReadOnlySpan<byte> sequence)
-        {
-            if (sequence.Length > Count) return -1;
-
-            for (int i = 0; i <= Count - sequence.Length; i++)
-            {
-                bool matches = true;
-                for (int j = 0; j < sequence.Length; j++)
-                {
-                    if (this[i + j] != sequence[j])
-                    {
-                        matches = false;
-                        break;
-                    }
-                }
-
-                if (matches) return i;
-            }
-
-            return -1;
-        }
-
-        /// <summary>
         /// Push a single element onto the end of the buffer.  Will throw an IndexOutOfRangeException if there
         /// is no empty space in the buffer.
         /// </summary>
-        public byte TakeOne()
+        public T TakeOne()
         {
             if (IsEmpty)
                 throw new IndexOutOfRangeException("Attempting to take an element from an empty buffer");
@@ -120,7 +91,7 @@ namespace RingBuffer
         /// is no empty space in the buffer.
         /// </summary>
         /// <param name="b">The element to add to the buffer</param>
-        public void PushOne(byte e)
+        public void PushOne(T e)
         {
             if (IsFull)
                 throw new IndexOutOfRangeException("Attempting to add more elements to the buffer than there is available space");
@@ -134,7 +105,7 @@ namespace RingBuffer
         /// decreasing the capacity
         /// </summary>
         /// <param name="data"></param>
-        public void Push(ReadOnlySpan<byte> data)
+        public void Push(ReadOnlySpan<T> data)
         {
             if (data.Length > Available) 
                 throw new IndexOutOfRangeException("Attempting to add more elements to the buffer than there is available space");
@@ -152,7 +123,7 @@ namespace RingBuffer
         /// currently stored in the buffer an IndexOutOfRangeException will be thrown.
         /// </summary>
         /// <param name="output">An output Span into which the leading elements will be copied</param>
-        public void Take(Span<byte> output)
+        public void Take(Span<T> output)
         {
             if (output.Length > Count) 
                 throw new IndexOutOfRangeException("Attempting to take more elements than are in the buffer");
@@ -171,9 +142,9 @@ namespace RingBuffer
         /// </summary>
         /// <param name="quantity">Number of elements to take from the front of the buffer</param>
         /// <returns></returns>
-        public byte[] Take(int quantity)
+        public T[] Take(int quantity)
         {
-            var output = new byte[quantity];
+            var output = new T[quantity];
             Take(output);
             return output;
         }
