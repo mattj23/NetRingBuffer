@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace RingBuffer
 {
@@ -6,7 +8,7 @@ namespace RingBuffer
     /// A ring buffer (or circular buffer) is a fixed array stored in memory which acts like an
     /// infinitely advancing queue. 
     /// </summary>
-    public class RingBuffer<T>
+    public class RingBuffer<T> : IReadOnlyList<T>
     {
         /// <summary>
         /// Internal storage array
@@ -194,5 +196,17 @@ namespace RingBuffer
         }
 
 
+        public IEnumerator<T> GetEnumerator()
+        {
+            for (int i = 0; i < this.Count; i++)
+            {
+                yield return this[i];
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 }

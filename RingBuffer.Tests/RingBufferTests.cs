@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -112,6 +113,27 @@ namespace RingBuffer.Tests
             var location = ring.Find(find);
 
             Assert.True(location < 0);
+        }
+
+        [Fact]
+        public void TestEnumerator()
+        {
+            var d0 = new byte[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+            var d1 = new byte[] {11, 12, 13};
+            var ring = new RingBuffer<byte>(10);
+            ring.Push(d0);
+            ring.Take(4);
+            ring.Push(d1);
+
+            var expected = new byte[] {5, 6, 7, 8, 9, 10, 11, 12, 13};
+            var collected = new List<byte>();
+
+            foreach (var b in ring)
+            {
+                collected.Add(b);
+            }
+
+            Assert.Equal(expected, collected.ToArray());
         }
 
 
