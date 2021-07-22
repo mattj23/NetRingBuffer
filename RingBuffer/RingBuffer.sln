@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingBuffer", "RingBuffer.csproj", "{C1C6D6D0-AA48-433F-BDDB-7ECE7F6C9B84}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RingBuffer.Tests", "..\RingBuffer.Tests\RingBuffer.Tests.csproj", "{D1AF79C0-4B14-4780-92DA-022278B47FCC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C1C6D6D0-AA48-433F-BDDB-7ECE7F6C9B84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1C6D6D0-AA48-433F-BDDB-7ECE7F6C9B84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1C6D6D0-AA48-433F-BDDB-7ECE7F6C9B84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1C6D6D0-AA48-433F-BDDB-7ECE7F6C9B84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1AF79C0-4B14-4780-92DA-022278B47FCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1AF79C0-4B14-4780-92DA-022278B47FCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1AF79C0-4B14-4780-92DA-022278B47FCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1AF79C0-4B14-4780-92DA-022278B47FCC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0BCE12DC-389D-407E-9E85-BBEE355A8109}
+	EndGlobalSection
+EndGlobal
