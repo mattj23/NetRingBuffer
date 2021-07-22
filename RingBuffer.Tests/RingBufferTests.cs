@@ -50,6 +50,72 @@ namespace RingBuffer.Tests
         }
 
         [Fact]
+        public void TestFind()
+        {
+            var testData = new byte[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+            var buffer = new RingBuffer(10);
+            buffer.Push(testData);
+            buffer.Take(2);
+
+            var find = new byte[] {5, 6, 7};
+            var location = buffer.Find(find);
+
+            Assert.Equal(2, location);
+        }
+
+        [Fact]
+        public void TestFindFull()
+        {
+            var testData = new byte[] {1, 2, 3};
+            var buffer = new RingBuffer(10);
+            buffer.Push(testData);
+
+            var find = new byte[] {1, 2, 3};
+            var location = buffer.Find(find);
+
+            Assert.Equal(0, location);
+        }
+
+        [Fact]
+        public void TestPushOne()
+        {
+            var buffer = new RingBuffer(10);
+            buffer.PushOne(1);
+            buffer.PushOne(2);
+
+            Assert.Equal(2, buffer.Count);
+            Assert.Equal(1, buffer[0]);
+            Assert.Equal(2, buffer[1]);
+        }
+
+        [Fact]
+        public void TestTakeOne()
+        {
+            var testData = new byte[] {1, 2, 3};
+            var buffer = new RingBuffer(10);
+            buffer.Push(testData);
+
+            Assert.Equal(1, buffer.TakeOne());
+            Assert.Equal(2, buffer.TakeOne());
+            Assert.Equal(1, buffer.Count);
+        }
+
+        [Fact]
+        public void TestFindSearchTooBig()
+        {
+            var testData = new byte[] {1, 2, 3};
+            var buffer = new RingBuffer(10);
+            buffer.Push(testData);
+            buffer.Take(2);
+
+            var find = new byte[] {1, 2, 3};
+            var location = buffer.Find(find);
+
+            Assert.True(location < 0);
+        }
+
+
+        [Fact]
         public void TestStressBuffer()
         {
             var testCount = 100000;

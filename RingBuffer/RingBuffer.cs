@@ -73,6 +73,63 @@ namespace RingBuffer
         }
 
         /// <summary>
+        /// Search the entire buffer for a sequence of elements given as the argument, returning either the index of
+        /// the first element or a negative value if the sequence was not found. If the search sequence is longer than
+        /// the number of elements stored in the buffer, a negative value will also be returned.
+        /// </summary>
+        /// <param name="sequence">The sequence to search the buffer for</param>
+        /// <returns>Either the index of the found first element or a negative number if none was found</returns>
+        public int Find(ReadOnlySpan<byte> sequence)
+        {
+            if (sequence.Length > Count) return -1;
+
+            for (int i = 0; i <= Count - sequence.Length; i++)
+            {
+                bool matches = true;
+                for (int j = 0; j < sequence.Length; j++)
+                {
+                    if (this[i + j] != sequence[j])
+                    {
+                        matches = false;
+                        break;
+                    }
+                }
+
+                if (matches) return i;
+            }
+
+            return -1;
+        }
+
+        /// <summary>
+        /// Push a single element onto the end of the buffer.  Will throw an IndexOutOfRangeException if there
+        /// is no empty space in the buffer.
+        /// </summary>
+        public byte TakeOne()
+        {
+            if (IsEmpty)
+                throw new IndexOutOfRangeException("Attempting to take an element from an empty buffer");
+
+            var value = _buffer[_start];
+            AdvanceStart();
+            return value;
+        }
+
+        /// <summary>
+        /// Push a single element onto the end of the buffer.  Will throw an IndexOutOfRangeException if there
+        /// is no empty space in the buffer.
+        /// </summary>
+        /// <param name="b">The element to add to the buffer</param>
+        public void PushOne(byte e)
+        {
+            if (IsFull)
+                throw new IndexOutOfRangeException("Attempting to add more elements to the buffer than there is available space");
+
+            _buffer[_end] = e;
+            AdvanceEnd();
+        }
+
+        /// <summary>
         /// Pushes a number of elements onto the end of the buffer, increasing the total count of elements and
         /// decreasing the capacity
         /// </summary>
