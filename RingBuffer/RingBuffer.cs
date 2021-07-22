@@ -150,6 +150,24 @@ namespace RingBuffer
         }
 
         /// <summary>
+        /// Take and return an array containing the entire contents of the ring buffer, clearing it in the process.
+        /// </summary>
+        /// <returns>All contents of the buffer</returns>
+        public T[] TakeAll()
+        {
+            return Take(Count);
+        }
+
+        /// <summary>
+        /// Clear the entire contents of the ring buffer. This operation simply moves the cursors internally, and so
+        /// is favorable to using Take in situations where the data is not used and performance is important.
+        /// </summary>
+        public void Clear()
+        {
+            _start = _end;
+        }
+
+        /// <summary>
         /// Calculate the _buffer index that corresponds with an index offset from _start
         /// </summary>
         /// <param name="i"></param>

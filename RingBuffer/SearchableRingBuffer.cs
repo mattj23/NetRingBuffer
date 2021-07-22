@@ -9,6 +9,23 @@ namespace RingBuffer
         }
 
         /// <summary>
+        /// Search the entire buffer for an element which matches the given argument, returning either the index of
+        /// the located element or a negative value if the element was not found.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        public int FindOne(T element)
+        {
+            for (int i = 0; i < Count; i++)
+            {
+                if (this[i].Equals(element))
+                    return i;
+            }
+
+            return -1;
+        }
+
+        /// <summary>
         /// Search the entire buffer for a sequence of elements given as the argument, returning either the index of
         /// the first element or a negative value if the sequence was not found. If the search sequence is longer than
         /// the number of elements stored in the buffer, a negative value will also be returned.
