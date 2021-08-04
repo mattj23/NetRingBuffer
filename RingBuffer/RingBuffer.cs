@@ -75,8 +75,8 @@ namespace RingBuffer
         }
 
         /// <summary>
-        /// Push a single element onto the end of the buffer.  Will throw an IndexOutOfRangeException if there
-        /// is no empty space in the buffer.
+        /// Remove and return the first element at the front of the buffer.  Will throw an IndexOutOfRangeException if there are no elements
+        /// in the buffer.
         /// </summary>
         public T TakeOne()
         {
@@ -86,6 +86,19 @@ namespace RingBuffer
             var value = _buffer[_start];
             AdvanceStart();
             return value;
+        }
+
+        /// <summary>
+        /// Clear a number of elements off of the front of the buffer, not returning them.  This advances the ring buffer start index,
+        /// so it is a very inexpensive operation.
+        /// </summary>
+        /// <param name="count"></param>
+        public void ClearFront(int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                AdvanceStart();
+            }
         }
 
         /// <summary>
